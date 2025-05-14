@@ -1,0 +1,71 @@
+
+<div class="container mt-4">
+  <% if (mensaje) { %>
+    <div class="alert alert-success">
+      <%= mensaje %>
+    </div>
+  <% } %>
+
+  <h1 style="text-align: center;" class="mb-4">Listado de Países</h1>
+
+  <table class="table table-bordered table-hover table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>Nombre (Español)</th>
+        <th>Capital</th>
+        <th>Fronteras</th>
+        <th>Área (km²)</th>
+        <th>Población</th>
+        <th>Gini</th>
+        <th>Zonas Horarias</th>
+        <th>Creador</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% paises.forEach(pais => { %>
+        <tr>
+          <td><%= pais.nombreEspanol %></td>
+          <td><%= pais.capital %></td>
+          <td><%= pais.fronteras %></td>
+          <td><%= pais.area.toLocaleString() %></td>
+          <td><%= pais.poblacion.toLocaleString() %></td>
+          <td><%= pais.gini ?? 'N/A' %></td>
+          <td><%= pais.zonasHorarias %></td>
+          <td><%= pais.creador %></td>
+          <td>
+            <div style="display: flex; gap: 0.5rem;">
+              <a href="/paises/formulario/editar/<%= pais._id %>" class="btn btn-primary">Editar</a>
+              <form action="/paises/<%= pais._id %>?_method=DELETE" method="POST" class="form-eliminar">
+                <button type="submit" class="btn btn-danger">Eliminar</button>
+              </form>
+            </div>
+          </td>          
+        </tr>
+      <% }); %>
+    </tbody>
+
+    <tfoot class="table-light">
+      <tr>
+        <th colspan="3">Totales:</th>
+        <th><%= totales.areaTotal.toLocaleString() %></th>
+        <th><%= totales.poblacionTotal.toLocaleString() %></th>
+        <th><%= totales.giniPromedio %></th>
+        <th colspan="3"></th>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+<script>
+  document.querySelectorAll('.form-eliminar').forEach(form => {
+    form.addEventListener('submit', function (e) {
+      const confirmado = confirm('¿Estás seguro que querés eliminar este país? Esta acción no se puede deshacer.');
+      if (!confirmado) {
+        e.preventDefault(); // cancela el envío
+      }
+    });
+  });
+</script>
+
+

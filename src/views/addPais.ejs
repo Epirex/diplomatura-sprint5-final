@@ -1,0 +1,118 @@
+<div class="form-container">
+  <h1>Agregar País</h1>
+
+  <% if (errores && Object.keys(errores).length > 0) { %>
+    <div class="alert alert-danger">
+      <ul>
+        <% Object.values(errores).forEach(error => { %>
+          <li><%= error %></li>
+        <% }) %>        
+      </ul>
+    </div>
+  <% } %>
+
+  <form action="/paises/agregar" method="POST">
+    
+    <!-- Nombre -->
+    <div class="form-group">
+      <label>Nombre oficial en español</label>
+      <input type="text" name="nombreEspanol" value="<%= datos?.nombreEspanol || '' %>" required>
+    </div>
+
+    <!-- Capital -->
+    <div class="form-group">
+      <label>Capital(es)</label>
+      <div id="capitalContainer">
+        <% if (Array.isArray(datos?.capital)) { %>
+          <% datos.capital.forEach(c => { %>
+            <input type="text" name="capital[]" value="<%= c %>">
+          <% }) %>
+        <% } else { %>
+          <input type="text" name="capital[]" value="<%= datos?.capital || '' %>">
+        <% } %>
+      </div>
+      <button type="button" class="btn btn-sm btn-secondary" onclick="agregarCampo('capitalContainer', 'capital[]')">Agregar capital</button>
+    </div>
+
+    <!-- Área -->
+    <div class="form-group">
+      <label>Área (km²)</label>
+      <input type="number" step="any" name="area" value="<%= datos?.area || '' %>" required>
+    </div>
+
+    <!-- Fronteras -->
+    <div class="form-group">
+      <label>Fronteras</label>
+      <div id="fronterasContainer">
+        <% if (Array.isArray(datos?.fronteras)) { %>
+          <% datos.fronteras.forEach(f => { %>
+            <input type="text" name="fronteras[]" value="<%= f %>">
+          <% }) %>
+        <% } else if (datos?.fronteras) { %>
+          <input type="text" name="fronteras[]" value="<%= datos.fronteras %>">
+        <% } else { %>
+          <input type="text" name="fronteras[]">
+        <% } %>
+      </div>
+      <button type="button" class="btn btn-sm btn-secondary" onclick="agregarCampo('fronterasContainer', 'fronteras[]')">Agregar frontera</button>
+    </div>
+
+    <!-- Población -->
+    <div class="form-group">
+      <label>Población</label>
+      <input type="number" name="poblacion" value="<%= datos?.poblacion || '' %>" required>
+    </div>
+
+    <!-- Gini Año -->
+    <div class="form-group">
+      <label>Año del Gini</label>
+      <input type="number" name="giniAnio" value="<%= datos.giniAnio || '' %>">
+    </div>
+
+    <!-- Gini Valor -->
+    <div class="form-group">
+      <label>Valor del Gini</label>
+      <input type="number" step="0.01" name="gini" value="<%= datos.gini || '' %>">
+    </div>
+
+    <!-- Zonas Horarias -->
+    <div class="form-group">
+      <label>Zonas Horarias</label>
+      <div id="zonasHorariasContainer">
+        <% if (Array.isArray(datos?.zonasHorarias)) { %>
+          <% datos.zonasHorarias.forEach(z => { %>
+            <input type="text" name="zonasHorarias[]" value="<%= z %>">
+          <% }) %>
+        <% } else if (datos?.zonasHorarias) { %>
+          <input type="text" name="zonasHorarias[]" value="<%= datos.zonasHorarias %>">
+        <% } else { %>
+          <input type="text" name="zonasHorarias[]">
+        <% } %>
+      </div>
+      <button type="button" class="btn btn-sm btn-secondary" onclick="agregarCampo('zonasHorariasContainer', 'zonasHorarias[]')">Agregar zona</button>
+    </div>
+
+    <!-- Creador -->
+    <div class="form-group">
+      <label>Creador</label>
+      <input type="text" name="creador" value="<%= datos?.creador || '' %>" required>
+    </div>
+
+    <!-- Botón -->
+    <div class="btn-container">
+      <button type="submit" class="button btn-forms">Agregar País</button>
+    </div>
+
+  </form>
+</div>
+
+<script>
+  function agregarCampo(containerId, fieldName) {
+    const container = document.getElementById(containerId);
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.name = fieldName;
+    input.classList.add('mb-1');
+    container.appendChild(input);
+  }
+</script>
